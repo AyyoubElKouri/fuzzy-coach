@@ -7,14 +7,23 @@ package com.ayyoub.fuzzycoach.fuzzyengine.core;
  */
 public final class RuleSyntaxException extends IllegalArgumentException {
 
+    private final String detail;
     private final int offset;
     private final String ruleText;
 
     public RuleSyntaxException(String detail, int offset, String ruleText) {
         super(buildMessage(detail, offset, ruleText));
 
+        this.detail = detail;
         this.offset = offset;
         this.ruleText = ruleText;
+    }
+
+    /**
+     * @return the short description of the error, without position and text
+     */
+    public String detail() {
+        return detail;
     }
 
     /**

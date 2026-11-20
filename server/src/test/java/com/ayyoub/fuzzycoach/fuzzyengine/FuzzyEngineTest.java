@@ -5,6 +5,8 @@ import java.util.Map;
 
 import com.ayyoub.fuzzycoach.fuzzyengine.core.LinguisticVariable;
 import com.ayyoub.fuzzycoach.fuzzyengine.core.Rule;
+import com.ayyoub.fuzzycoach.fuzzyengine.core.RuleActivation;
+import com.ayyoub.fuzzycoach.fuzzyengine.core.RuleSyntaxException;
 import com.ayyoub.fuzzycoach.fuzzyengine.core.Triangle;
 import com.ayyoub.fuzzycoach.fuzzyengine.defuzzifier.CentroidDefuzzifier;
 import com.ayyoub.fuzzycoach.fuzzyengine.defuzzifier.Defuzzifier;
@@ -34,11 +36,20 @@ class FuzzyEngineTest {
         new Rule("IF motivation is high THEN intensity is high"));
 
     private static FuzzyEngine engine(Defuzzifier defuzzifier) {
-        return new FuzzyEngine(List.of(MOTIVATION), List.of(INTENSITY), RULES, defuzzifier);
+        return FuzzyEngine.builder()
+            .input(MOTIVATION)
+            .output(INTENSITY)
+            .rules(RULES)
+            .defuzzifier(defuzzifier)
+            .build();
     }
 
     private static FuzzyEngine engine() {
-        return new FuzzyEngine(List.of(MOTIVATION), List.of(INTENSITY), RULES);
+        return FuzzyEngine.builder()
+            .input(MOTIVATION)
+            .output(INTENSITY)
+            .rules(RULES)
+            .build();
     }
 
     @Test
@@ -62,6 +73,14 @@ class FuzzyEngineTest {
     }
 
     @Test
+    void acceptsTypedInputs() {
+        FuzzyResult result = engine().evaluate(Inputs.of("motivation", 5.0));
+
+        assertEquals(5.0, result.output("intensity"), 0.05);
+        assertEquals(5.0, result.findOutput("intensity").orElseThrow(), 1e-9);
+    }
+
+    @Test
     void exposesTheFuzzyValueOfTheOutput() {
         FuzzyResult result = engine().evaluate(Map.of("motivation", 5.0));
         Map<String, Double> degrees = result.fuzzyValues().get("intensity").degrees();
@@ -69,6 +88,25 @@ class FuzzyEngineTest {
         assertEquals(2, degrees.size());
         assertTrue(degrees.get("low") > 0.0);
         assertTrue(degrees.get("high") > 0.0);
+    }
+
+    @Test
+    void explainsWhichRulesFiredStrongestFirst() {
+        FuzzyResult result = engine().evaluate(Map.of("motivation", 5.0));
+
+        List<RuleActivation> explanation = result.explanation("intensity");
+
+        assertEquals(2, explanation.size());
+        assertTrue(explanation.get(0).activation() >= explanation.get(1).activation());
+        assertEquals("intensity", explanation.get(0).rule().conclusion().variableName());
+        assertTrue(explanation.get(0).activation() > 0.0);
+    }
+
+    @Test
+    void explanationRejectsAnUnknownOutput() {
+        FuzzyResult result = engine().evaluate(Map.of("motivation", 5.0));
+
+        assertThrows(IllegalArgumentException.class, () -> result.explanation("stress"));
     }
 
     @Test
@@ -81,11 +119,42 @@ class FuzzyEngineTest {
     }
 
     @Test
+    void builderParsesRulesFromText() {
+        FuzzyEngine engine = FuzzyEngine.builder()
+            .input(MOTIVATION)
+            .output(INTENSITY)
+            .rules(
+                "IF motivation is low THEN intensity is low",
+                "IF motivation is high THEN intensity is high")
+            .build();
+
+        assertEquals(5.0, engine.evaluate(Map.of("motivation", 5.0)).output("intensity"), 0.05);
+    }
+
+    @Test
+    void builderReportsWhichRuleTextFailedToParse() {
+        RuleSyntaxException error = assertThrows(
+            RuleSyntaxException.class,
+            () -> FuzzyEngine.builder()
+                .input(MOTIVATION)
+                .output(INTENSITY)
+                .rules(
+                    "IF motivation is low THEN intensity is low",
+                    "IF motivation is high intensity is high"));
+
+        assertTrue(error.getMessage().contains("rule 2 of 2"));
+    }
+
+    @Test
     void rejectsUnknownConditionVariable() {
         Rule badRule = new Rule("IF stress is low THEN intensity is low");
 
         assertThrows(IllegalArgumentException.class,
-            () -> new FuzzyEngine(List.of(MOTIVATION), List.of(INTENSITY), List.of(badRule)));
+            () -> FuzzyEngine.builder()
+                .input(MOTIVATION)
+                .output(INTENSITY)
+                .rule(badRule)
+                .build());
     }
 
     @Test
@@ -93,26 +162,35 @@ class FuzzyEngineTest {
         Rule badRule = new Rule("IF motivation is low THEN intensity is extreme");
 
         assertThrows(IllegalArgumentException.class,
-            () -> new FuzzyEngine(List.of(MOTIVATION), List.of(INTENSITY), List.of(badRule)));
+            () -> FuzzyEngine.builder()
+                .input(MOTIVATION)
+                .output(INTENSITY)
+                .rule(badRule)
+                .build());
     }
 
     @Test
     void rejectsVariableDeclaredAsBothInputAndOutput() {
         assertThrows(IllegalArgumentException.class,
-            () -> new FuzzyEngine(List.of(MOTIVATION), List.of(MOTIVATION), RULES));
+            () -> FuzzyEngine.builder()
+                .input(MOTIVATION)
+                .output(MOTIVATION)
+                .rules(RULES)
+                .build());
     }
 
     @Test
     void rejectsMissingInputValue() {
         FuzzyEngine engine = engine();
-        assertThrows(IllegalArgumentException.class, () -> engine.evaluate(Map.of()));
+        assertThrows(IllegalArgumentException.class,
+            () -> engine.evaluate(Inputs.from(Map.of())));
     }
 
     @Test
     void rejectsUnknownInputValue() {
         FuzzyEngine engine = engine();
         assertThrows(IllegalArgumentException.class,
-            () -> engine.evaluate(Map.of("motivation", 5.0, "stress", 2.0)));
+            () -> engine.evaluate(Inputs.of("stress", 2.0)));
     }
 
     @Test
@@ -121,9 +199,11 @@ class FuzzyEngineTest {
             "motivation", 0, 10,
             Map.of("low", new Triangle(0, 0, 1)));
 
-        Rule rule = new Rule("IF motivation is low THEN intensity is low");
-
-        FuzzyEngine engine = new FuzzyEngine(List.of(narrow), List.of(INTENSITY), List.of(rule));
+        FuzzyEngine engine = FuzzyEngine.builder()
+            .input(narrow)
+            .output(INTENSITY)
+            .rules("IF motivation is low THEN intensity is low")
+            .build();
 
         FuzzyResult result = engine.evaluate(Map.of("motivation", 9.0));
         assertEquals(5.0, result.output("intensity"), 0.05);

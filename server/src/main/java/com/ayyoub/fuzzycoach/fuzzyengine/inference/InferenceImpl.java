@@ -1,5 +1,6 @@
 package com.ayyoub.fuzzycoach.fuzzyengine.inference;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +10,7 @@ import com.ayyoub.fuzzycoach.fuzzyengine.core.Conclusion;
 import com.ayyoub.fuzzycoach.fuzzyengine.core.FuzzyValue;
 import com.ayyoub.fuzzycoach.fuzzyengine.core.LinguisticVariable;
 import com.ayyoub.fuzzycoach.fuzzyengine.core.Rule;
+import com.ayyoub.fuzzycoach.fuzzyengine.core.RuleActivation;
 import com.ayyoub.fuzzycoach.fuzzyengine.core.SimpleCondition;
 
 /**
@@ -18,7 +20,7 @@ import com.ayyoub.fuzzycoach.fuzzyengine.core.SimpleCondition;
 public final class InferenceImpl implements Inference {
 
     @Override
-    public Map<String, FuzzyValue> evaluate(
+    public InferenceResult evaluate(
         List<Rule> rules,
         Map<String, Map<String, Double>> fuzzified,
         List<LinguisticVariable> outputs) {
@@ -37,6 +39,7 @@ public final class InferenceImpl implements Inference {
             degreesByVariable.put(output.name(), degrees);
         }
 
+        List<RuleActivation> activations = new ArrayList<>();
         for (Rule rule : rules) {
             double activation = rule.condition().degree(degreeLookup(fuzzified));
             Conclusion conclusion = rule.conclusion();
@@ -54,16 +57,17 @@ public final class InferenceImpl implements Inference {
             }
 
             degrees.merge(conclusion.termName(), activation, Math::max);
+            activations.add(new RuleActivation(rule, activation));
         }
 
-        Map<String, FuzzyValue> result = new LinkedHashMap<>();
+        Map<String, FuzzyValue> fuzzyValues = new LinkedHashMap<>();
         for (LinguisticVariable output : outputs) {
-            result.put(
+            fuzzyValues.put(
                 output.name(),
                 new FuzzyValue(output, degreesByVariable.get(output.name())));
         }
 
-        return result;
+        return new InferenceResult(fuzzyValues, activations);
     }
 
     private ToDoubleFunction<SimpleCondition> degreeLookup(

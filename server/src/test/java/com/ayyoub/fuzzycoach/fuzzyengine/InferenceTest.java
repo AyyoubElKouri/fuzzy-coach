@@ -3,12 +3,13 @@ package com.ayyoub.fuzzycoach.fuzzyengine;
 import java.util.List;
 import java.util.Map;
 
-import com.ayyoub.fuzzycoach.fuzzyengine.core.FuzzyValue;
 import com.ayyoub.fuzzycoach.fuzzyengine.core.LinguisticVariable;
 import com.ayyoub.fuzzycoach.fuzzyengine.core.Rule;
+import com.ayyoub.fuzzycoach.fuzzyengine.core.RuleActivation;
 import com.ayyoub.fuzzycoach.fuzzyengine.core.Triangle;
 import com.ayyoub.fuzzycoach.fuzzyengine.inference.Inference;
 import com.ayyoub.fuzzycoach.fuzzyengine.inference.InferenceImpl;
+import com.ayyoub.fuzzycoach.fuzzyengine.inference.InferenceResult;
 
 import org.junit.jupiter.api.Test;
 
@@ -39,10 +40,10 @@ class InferenceTest {
         Map<String, Map<String, Double>> fuzzified = Map.of(
             "motivation", Map.of("low", 0.8, "high", 0.3));
 
-        Map<String, FuzzyValue> result =
+        InferenceResult result =
             new InferenceImpl().evaluate(List.of(rule), fuzzified, outputs);
 
-        assertEquals(0.3, result.get("intensity").degrees().get("low"), 1e-9);
+        assertEquals(0.3, result.fuzzyValue("intensity").degrees().get("low"), 1e-9);
     }
 
     @Test
@@ -53,10 +54,10 @@ class InferenceTest {
         Map<String, Map<String, Double>> fuzzified = Map.of(
             "motivation", Map.of("low", 0.8, "high", 0.3));
 
-        Map<String, FuzzyValue> result =
+        InferenceResult result =
             new InferenceImpl().evaluate(List.of(rule), fuzzified, outputs);
 
-        assertEquals(0.8, result.get("intensity").degrees().get("low"), 1e-9);
+        assertEquals(0.8, result.fuzzyValue("intensity").degrees().get("low"), 1e-9);
     }
 
     @Test
@@ -69,10 +70,10 @@ class InferenceTest {
             "motivation", Map.of("low", 0.8, "high", 0.9),
             "stress", Map.of("low", 0.2));
 
-        Map<String, FuzzyValue> result =
+        InferenceResult result =
             new InferenceImpl().evaluate(List.of(rule), fuzzified, outputs);
 
-        assertEquals(0.9, result.get("intensity").degrees().get("low"), 1e-9);
+        assertEquals(0.9, result.fuzzyValue("intensity").degrees().get("low"), 1e-9);
     }
 
     @Test
@@ -83,10 +84,30 @@ class InferenceTest {
         Map<String, Map<String, Double>> fuzzified = Map.of(
             "motivation", Map.of("low", 0.2, "high", 0.7));
 
-        Map<String, FuzzyValue> result =
+        InferenceResult result =
             new InferenceImpl().evaluate(List.of(rule1, rule2), fuzzified, outputs);
 
-        assertEquals(0.7, result.get("intensity").degrees().get("low"), 1e-9);
+        assertEquals(0.7, result.fuzzyValue("intensity").degrees().get("low"), 1e-9);
+    }
+
+    @Test
+    void recordsOneActivationPerRuleInRuleOrder() {
+        Rule rule1 = new Rule("IF motivation is low THEN intensity is low");
+        Rule rule2 = new Rule("IF motivation is high THEN intensity is high");
+
+        Map<String, Map<String, Double>> fuzzified = Map.of(
+            "motivation", Map.of("low", 0.2, "high", 0.7));
+
+        InferenceResult result =
+            new InferenceImpl().evaluate(List.of(rule1, rule2), fuzzified, outputs);
+
+        List<RuleActivation> activations = result.activations();
+
+        assertEquals(2, activations.size());
+        assertEquals(rule1, activations.get(0).rule());
+        assertEquals(0.2, activations.get(0).activation(), 1e-9);
+        assertEquals(rule2, activations.get(1).rule());
+        assertEquals(0.7, activations.get(1).activation(), 1e-9);
     }
 
     @Test
