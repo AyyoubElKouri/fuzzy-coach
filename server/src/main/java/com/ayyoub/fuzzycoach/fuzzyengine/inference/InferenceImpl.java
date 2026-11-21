@@ -1,8 +1,8 @@
 package com.ayyoub.fuzzycoach.fuzzyengine.inference;
 
 import com.ayyoub.fuzzycoach.fuzzyengine.rule.Conclusion;
+import com.ayyoub.fuzzycoach.fuzzyengine.rule.Condition;
 import com.ayyoub.fuzzycoach.fuzzyengine.rule.Rule;
-import com.ayyoub.fuzzycoach.fuzzyengine.rule.SimpleCondition;
 import com.ayyoub.fuzzycoach.fuzzyengine.variable.FuzzyValue;
 import com.ayyoub.fuzzycoach.fuzzyengine.variable.LinguisticVariable;
 
@@ -66,13 +66,14 @@ public final class InferenceImpl implements Inference {
         return new InferenceResult(fuzzyValues, activations);
     }
 
-    private ToDoubleFunction<SimpleCondition> degreeLookup(
+    private ToDoubleFunction<Condition.Simple> degreeLookup(
             Map<String, Map<String, Double>> fuzzified) {
 
         return condition -> degreeOf(condition, fuzzified);
     }
 
-    private double degreeOf(SimpleCondition condition, Map<String, Map<String, Double>> fuzzified) {
+    private double degreeOf(
+            Condition.Simple condition, Map<String, Map<String, Double>> fuzzified) {
 
         Map<String, Double> variableDegrees = fuzzified.get(condition.variableName());
         if (variableDegrees == null) {

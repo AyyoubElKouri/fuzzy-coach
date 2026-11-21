@@ -14,7 +14,7 @@ class RuleParserTest {
     void parsesASingleConditionWithoutAnOperator() {
         Rule rule = new Rule("IF motivation is high THEN intensity is low");
 
-        assertEquals(new SimpleCondition("motivation", "high"), rule.condition());
+        assertEquals(new Condition.Simple("motivation", "high"), rule.condition());
         assertEquals(new Conclusion("intensity", "low"), rule.conclusion());
     }
 
@@ -23,9 +23,9 @@ class RuleParserTest {
         Rule rule = new Rule("IF motivation is high AND stress is low THEN intensity is medium");
 
         assertEquals(
-                new AndCondition(List.of(
-                        new SimpleCondition("motivation", "high"),
-                        new SimpleCondition("stress", "low"))),
+                new Condition.And(List.of(
+                        new Condition.Simple("motivation", "high"),
+                        new Condition.Simple("stress", "low"))),
                 rule.condition());
     }
 
@@ -34,9 +34,9 @@ class RuleParserTest {
         Rule rule = new Rule("IF motivation is high OR stress is low THEN intensity is medium");
 
         assertEquals(
-                new OrCondition(List.of(
-                        new SimpleCondition("motivation", "high"),
-                        new SimpleCondition("stress", "low"))),
+                new Condition.Or(List.of(
+                        new Condition.Simple("motivation", "high"),
+                        new Condition.Simple("stress", "low"))),
                 rule.condition());
     }
 
@@ -46,11 +46,11 @@ class RuleParserTest {
                 + "THEN intensity is medium");
 
         assertEquals(
-                new OrCondition(List.of(
-                        new AndCondition(List.of(
-                                new SimpleCondition("motivation", "high"),
-                                new SimpleCondition("stress", "low"))),
-                        new SimpleCondition("focus", "high"))),
+                new Condition.Or(List.of(
+                        new Condition.And(List.of(
+                                new Condition.Simple("motivation", "high"),
+                                new Condition.Simple("stress", "low"))),
+                        new Condition.Simple("focus", "high"))),
                 rule.condition());
     }
 
@@ -60,11 +60,11 @@ class RuleParserTest {
                 + "THEN intensity is medium");
 
         assertEquals(
-                new AndCondition(List.of(
-                        new SimpleCondition("motivation", "high"),
-                        new OrCondition(List.of(
-                                new SimpleCondition("stress", "low"),
-                                new SimpleCondition("focus", "high"))))),
+                new Condition.And(List.of(
+                        new Condition.Simple("motivation", "high"),
+                        new Condition.Or(List.of(
+                                new Condition.Simple("stress", "low"),
+                                new Condition.Simple("focus", "high"))))),
                 rule.condition());
     }
 
@@ -74,10 +74,10 @@ class RuleParserTest {
                 + "THEN intensity is medium");
 
         assertEquals(
-                new AndCondition(List.of(
-                        new SimpleCondition("motivation", "high"),
-                        new SimpleCondition("stress", "low"),
-                        new SimpleCondition("focus", "high"))),
+                new Condition.And(List.of(
+                        new Condition.Simple("motivation", "high"),
+                        new Condition.Simple("stress", "low"),
+                        new Condition.Simple("focus", "high"))),
                 rule.condition());
     }
 
@@ -86,9 +86,9 @@ class RuleParserTest {
         Rule rule = new Rule("if motivation IS high and stress is low then intensity is medium");
 
         assertEquals(
-                new AndCondition(List.of(
-                        new SimpleCondition("motivation", "high"),
-                        new SimpleCondition("stress", "low"))),
+                new Condition.And(List.of(
+                        new Condition.Simple("motivation", "high"),
+                        new Condition.Simple("stress", "low"))),
                 rule.condition());
     }
 
@@ -110,9 +110,9 @@ class RuleParserTest {
 
         assertEquals(
                 List.of(
-                        new SimpleCondition("a", "x"),
-                        new SimpleCondition("b", "y"),
-                        new SimpleCondition("c", "z")),
+                        new Condition.Simple("a", "x"),
+                        new Condition.Simple("b", "y"),
+                        new Condition.Simple("c", "z")),
                 rule.condition().simpleConditions());
     }
 
@@ -129,6 +129,47 @@ class RuleParserTest {
         });
 
         assertEquals(0.5, degree, 1e-9);
+    }
+
+    @Test
+    void parsesNotConditions() {
+        Rule rule = new Rule("IF NOT motivation is high THEN intensity is low");
+
+        assertEquals(
+                new Condition.Not(new Condition.Simple("motivation", "high")), rule.condition());
+    }
+
+    @Test
+    void notBindsTighterThanAnd() {
+        Rule rule =
+                new Rule("IF NOT motivation is high AND stress is low THEN intensity is medium");
+
+        assertEquals(
+                new Condition.And(List.of(
+                        new Condition.Not(new Condition.Simple("motivation", "high")),
+                        new Condition.Simple("stress", "low"))),
+                rule.condition());
+    }
+
+    @Test
+    void notAppliesToAParenthesizedGroup() {
+        Rule rule = new Rule("IF NOT (motivation is high AND stress is low) THEN intensity is low");
+
+        assertEquals(
+                new Condition.Not(new Condition.And(List.of(
+                        new Condition.Simple("motivation", "high"),
+                        new Condition.Simple("stress", "low")))),
+                rule.condition());
+        assertEquals(rule, new Rule(rule.toString()));
+    }
+
+    @Test
+    void evaluatesNotAsTheComplement() {
+        Rule rule = new Rule("IF NOT motivation is high THEN intensity is low");
+
+        double degree = rule.condition().degree(condition -> 0.25);
+
+        assertEquals(0.75, degree, 1e-9);
     }
 
     @Test

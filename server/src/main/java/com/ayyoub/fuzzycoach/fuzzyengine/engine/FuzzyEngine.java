@@ -8,9 +8,9 @@ import com.ayyoub.fuzzycoach.fuzzyengine.inference.Inference;
 import com.ayyoub.fuzzycoach.fuzzyengine.inference.InferenceImpl;
 import com.ayyoub.fuzzycoach.fuzzyengine.inference.InferenceResult;
 import com.ayyoub.fuzzycoach.fuzzyengine.rule.Conclusion;
+import com.ayyoub.fuzzycoach.fuzzyengine.rule.Condition;
 import com.ayyoub.fuzzycoach.fuzzyengine.rule.Rule;
 import com.ayyoub.fuzzycoach.fuzzyengine.rule.RuleSyntaxException;
-import com.ayyoub.fuzzycoach.fuzzyengine.rule.SimpleCondition;
 import com.ayyoub.fuzzycoach.fuzzyengine.variable.FuzzyValue;
 import com.ayyoub.fuzzycoach.fuzzyengine.variable.LinguisticVariable;
 
@@ -161,7 +161,7 @@ public final class FuzzyEngine {
         }
 
         for (Rule rule : rules) {
-            for (SimpleCondition condition : rule.condition().simpleConditions()) {
+            for (Condition.Simple condition : rule.condition().simpleConditions()) {
                 requireTerm(
                         inputs,
                         inputNames,

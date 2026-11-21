@@ -7,20 +7,20 @@ import java.util.List;
  * Parses rule text such as
  * {@code "IF motivation is high AND stress is low THEN intensity is medium"}.
  *
- * <p>{@code AND} binds tighter than {@code OR}. Parentheses override the
- * precedence. The grammar is:
+ * <p>{@code NOT} binds tighter than {@code AND}, and {@code AND} binds tighter
+ * than {@code OR}. Parentheses override the precedence. The grammar is:
  *
  * <pre>
  * rule        := IF orExpression THEN condition EOF
  * orExpression := andExpression (OR andExpression)*
  * andExpression := atom (AND atom)*
- * atom        := condition | '(' orExpression ')'
+ * atom        := NOT atom | condition | '(' orExpression ')'
  * condition   := IDENTIFIER IS IDENTIFIER
  * </pre>
  *
  * <p>Keywords are case-insensitive. Names are case-sensitive and match
  * {@code [A-Za-z_][A-Za-z0-9_]*}. The words {@code if}, {@code then},
- * {@code and}, {@code or} and {@code is} are reserved.
+ * {@code and}, {@code or}, {@code not} and {@code is} are reserved.
  */
 final class RuleParser {
 
@@ -64,7 +64,7 @@ final class RuleParser {
             addOrCondition(conditions, parseAndExpression());
         }
 
-        return conditions.size() == 1 ? conditions.get(0) : new OrCondition(conditions);
+        return conditions.size() == 1 ? conditions.get(0) : new Condition.Or(conditions);
     }
 
     private Condition parseAndExpression() {
@@ -74,11 +74,15 @@ final class RuleParser {
             addAndCondition(conditions, parseAtom());
         } while (matchKeyword("and"));
 
-        return conditions.size() == 1 ? conditions.get(0) : new AndCondition(conditions);
+        return conditions.size() == 1 ? conditions.get(0) : new Condition.And(conditions);
     }
 
     private Condition parseAtom() {
         skipWhitespace();
+
+        if (matchKeyword("not")) {
+            return new Condition.Not(parseAtom());
+        }
 
         if (match('(')) {
             Condition condition = parseOrExpression();
@@ -89,12 +93,12 @@ final class RuleParser {
         return parseSimpleCondition();
     }
 
-    private SimpleCondition parseSimpleCondition() {
+    private Condition.Simple parseSimpleCondition() {
         String variableName = readIdentifier();
         expectKeyword("is");
         String termName = readIdentifier();
 
-        return new SimpleCondition(variableName, termName);
+        return new Condition.Simple(variableName, termName);
     }
 
     private Conclusion parseConclusion() {
@@ -106,7 +110,7 @@ final class RuleParser {
     }
 
     private static void addOrCondition(List<Condition> conditions, Condition condition) {
-        if (condition instanceof OrCondition or) {
+        if (condition instanceof Condition.Or or) {
             conditions.addAll(or.conditions());
             return;
         }
@@ -115,7 +119,7 @@ final class RuleParser {
     }
 
     private static void addAndCondition(List<Condition> conditions, Condition condition) {
-        if (condition instanceof AndCondition and) {
+        if (condition instanceof Condition.And and) {
             conditions.addAll(and.conditions());
             return;
         }
@@ -202,6 +206,7 @@ final class RuleParser {
                 || identifier.equalsIgnoreCase("then")
                 || identifier.equalsIgnoreCase("and")
                 || identifier.equalsIgnoreCase("or")
+                || identifier.equalsIgnoreCase("not")
                 || identifier.equalsIgnoreCase("is");
     }
 
