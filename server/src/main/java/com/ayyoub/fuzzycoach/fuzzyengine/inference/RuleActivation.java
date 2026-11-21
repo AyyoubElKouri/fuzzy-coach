@@ -1,7 +1,5 @@
 package com.ayyoub.fuzzycoach.fuzzyengine.inference;
 
-import com.ayyoub.fuzzycoach.fuzzyengine.rule.Rule;
-
 /**
  * One rule evaluated during inference: the rule, and how strongly it fired.
  *

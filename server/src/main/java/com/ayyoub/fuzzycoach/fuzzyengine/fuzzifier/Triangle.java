@@ -1,4 +1,4 @@
-package com.ayyoub.fuzzycoach.fuzzyengine.membership;
+package com.ayyoub.fuzzycoach.fuzzyengine.fuzzifier;
 
 /**
  * Triangular membership function defined by its left foot {@code a}, peak {@code b}

@@ -1,6 +1,4 @@
-package com.ayyoub.fuzzycoach.fuzzyengine.variable;
-
-import com.ayyoub.fuzzycoach.fuzzyengine.membership.MembershipFunction;
+package com.ayyoub.fuzzycoach.fuzzyengine.fuzzifier;
 
 import java.util.Map;
 

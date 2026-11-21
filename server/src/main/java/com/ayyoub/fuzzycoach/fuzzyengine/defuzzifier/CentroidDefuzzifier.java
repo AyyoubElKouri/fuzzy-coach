@@ -1,6 +1,6 @@
 package com.ayyoub.fuzzycoach.fuzzyengine.defuzzifier;
 
-import com.ayyoub.fuzzycoach.fuzzyengine.variable.FuzzyValue;
+import com.ayyoub.fuzzycoach.fuzzyengine.fuzzifier.FuzzyValue;
 
 /**
  * Center of gravity: the weighted average of {@code x} over the fuzzy set.

@@ -1,9 +1,7 @@
-package com.ayyoub.fuzzycoach.fuzzyengine.variable;
+package com.ayyoub.fuzzycoach.fuzzyengine.fuzzifier;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-
-import com.ayyoub.fuzzycoach.fuzzyengine.membership.Triangle;
 
 import org.junit.jupiter.api.Test;
 

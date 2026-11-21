@@ -1,4 +1,4 @@
-package com.ayyoub.fuzzycoach.fuzzyengine.engine;
+package com.ayyoub.fuzzycoach.fuzzyengine;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;

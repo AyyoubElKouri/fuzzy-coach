@@ -1,11 +1,11 @@
 package com.ayyoub.fuzzycoach;
 
-import com.ayyoub.fuzzycoach.fuzzyengine.engine.FuzzyEngine;
-import com.ayyoub.fuzzycoach.fuzzyengine.engine.FuzzyResult;
-import com.ayyoub.fuzzycoach.fuzzyengine.engine.Inputs;
-import com.ayyoub.fuzzycoach.fuzzyengine.membership.Triangle;
-import com.ayyoub.fuzzycoach.fuzzyengine.rule.Rule;
-import com.ayyoub.fuzzycoach.fuzzyengine.variable.LinguisticVariable;
+import com.ayyoub.fuzzycoach.fuzzyengine.FuzzyEngine;
+import com.ayyoub.fuzzycoach.fuzzyengine.FuzzyResult;
+import com.ayyoub.fuzzycoach.fuzzyengine.Inputs;
+import com.ayyoub.fuzzycoach.fuzzyengine.fuzzifier.LinguisticVariable;
+import com.ayyoub.fuzzycoach.fuzzyengine.fuzzifier.Triangle;
+import com.ayyoub.fuzzycoach.fuzzyengine.inference.Rule;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

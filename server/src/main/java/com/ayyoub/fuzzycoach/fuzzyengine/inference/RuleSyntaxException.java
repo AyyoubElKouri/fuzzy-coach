@@ -1,4 +1,4 @@
-package com.ayyoub.fuzzycoach.fuzzyengine.rule;
+package com.ayyoub.fuzzycoach.fuzzyengine.inference;
 
 /**
  * A rule text that does not follow the rule grammar.

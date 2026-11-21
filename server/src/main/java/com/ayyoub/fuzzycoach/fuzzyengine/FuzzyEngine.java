@@ -1,18 +1,18 @@
-package com.ayyoub.fuzzycoach.fuzzyengine.engine;
+package com.ayyoub.fuzzycoach.fuzzyengine;
 
 import com.ayyoub.fuzzycoach.fuzzyengine.defuzzifier.CentroidDefuzzifier;
 import com.ayyoub.fuzzycoach.fuzzyengine.defuzzifier.Defuzzifier;
+import com.ayyoub.fuzzycoach.fuzzyengine.fuzzifier.DefaultFuzzifier;
 import com.ayyoub.fuzzycoach.fuzzyengine.fuzzifier.Fuzzifier;
-import com.ayyoub.fuzzycoach.fuzzyengine.fuzzifier.FuzzifierImpl;
+import com.ayyoub.fuzzycoach.fuzzyengine.fuzzifier.FuzzyValue;
+import com.ayyoub.fuzzycoach.fuzzyengine.fuzzifier.LinguisticVariable;
+import com.ayyoub.fuzzycoach.fuzzyengine.inference.Conclusion;
+import com.ayyoub.fuzzycoach.fuzzyengine.inference.Condition;
+import com.ayyoub.fuzzycoach.fuzzyengine.inference.DefaultInference;
 import com.ayyoub.fuzzycoach.fuzzyengine.inference.Inference;
-import com.ayyoub.fuzzycoach.fuzzyengine.inference.InferenceImpl;
 import com.ayyoub.fuzzycoach.fuzzyengine.inference.InferenceResult;
-import com.ayyoub.fuzzycoach.fuzzyengine.rule.Conclusion;
-import com.ayyoub.fuzzycoach.fuzzyengine.rule.Condition;
-import com.ayyoub.fuzzycoach.fuzzyengine.rule.Rule;
-import com.ayyoub.fuzzycoach.fuzzyengine.rule.RuleSyntaxException;
-import com.ayyoub.fuzzycoach.fuzzyengine.variable.FuzzyValue;
-import com.ayyoub.fuzzycoach.fuzzyengine.variable.LinguisticVariable;
+import com.ayyoub.fuzzycoach.fuzzyengine.inference.Rule;
+import com.ayyoub.fuzzycoach.fuzzyengine.inference.RuleSyntaxException;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -22,8 +22,12 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Runs the full Mamdani pipeline in one call:
+ * <p>Runs the full Mamdani pipeline in one call:
  * fuzzify, infer, defuzzify.
+ *
+ * <p>Each stage lives in its own package behind one public interface:
+ * {@link Fuzzifier}, {@link Inference}, and {@link Defuzzifier}. This class
+ * wires them together, validates the configuration, and hands the result back.
  *
  * <p>Inference covers both the rule evaluation and the merging of rule
  * conclusions into one fuzzy value per output variable. Defuzzification then
@@ -110,7 +114,7 @@ public final class FuzzyEngine {
         Map<String, Double> values = inputs.asMap();
         requireCompleteInputs(values);
 
-        Map<String, Map<String, Double>> fuzzified = fuzzifier.fuzzify(this.inputs, values);
+        Map<String, FuzzyValue> fuzzified = fuzzifier.fuzzify(this.inputs, values);
         InferenceResult inferred = inference.evaluate(rules, fuzzified, outputs);
         Map<String, FuzzyValue> fuzzyValues = inferred.fuzzyValues();
 
@@ -223,8 +227,8 @@ public final class FuzzyEngine {
         private final List<LinguisticVariable> inputs = new ArrayList<>();
         private final List<LinguisticVariable> outputs = new ArrayList<>();
         private final List<Rule> rules = new ArrayList<>();
-        private Fuzzifier fuzzifier = new FuzzifierImpl();
-        private Inference inference = new InferenceImpl();
+        private Fuzzifier fuzzifier = new DefaultFuzzifier();
+        private Inference inference = new DefaultInference();
         private Defuzzifier defuzzifier = new CentroidDefuzzifier();
 
         private Builder() {}

@@ -1,4 +1,4 @@
-package com.ayyoub.fuzzycoach.fuzzyengine.engine;
+package com.ayyoub.fuzzycoach.fuzzyengine;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -6,11 +6,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.ayyoub.fuzzycoach.fuzzyengine.defuzzifier.CentroidDefuzzifier;
 import com.ayyoub.fuzzycoach.fuzzyengine.defuzzifier.Defuzzifier;
+import com.ayyoub.fuzzycoach.fuzzyengine.fuzzifier.LinguisticVariable;
+import com.ayyoub.fuzzycoach.fuzzyengine.fuzzifier.Triangle;
+import com.ayyoub.fuzzycoach.fuzzyengine.inference.Rule;
 import com.ayyoub.fuzzycoach.fuzzyengine.inference.RuleActivation;
-import com.ayyoub.fuzzycoach.fuzzyengine.membership.Triangle;
-import com.ayyoub.fuzzycoach.fuzzyengine.rule.Rule;
-import com.ayyoub.fuzzycoach.fuzzyengine.rule.RuleSyntaxException;
-import com.ayyoub.fuzzycoach.fuzzyengine.variable.LinguisticVariable;
+import com.ayyoub.fuzzycoach.fuzzyengine.inference.RuleSyntaxException;
 
 import org.junit.jupiter.api.Test;
 

@@ -1,4 +1,4 @@
-package com.ayyoub.fuzzycoach.fuzzyengine.engine;
+package com.ayyoub.fuzzycoach.fuzzyengine;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;

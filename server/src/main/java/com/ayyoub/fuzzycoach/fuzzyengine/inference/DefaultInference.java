@@ -1,10 +1,7 @@
 package com.ayyoub.fuzzycoach.fuzzyengine.inference;
 
-import com.ayyoub.fuzzycoach.fuzzyengine.rule.Conclusion;
-import com.ayyoub.fuzzycoach.fuzzyengine.rule.Condition;
-import com.ayyoub.fuzzycoach.fuzzyengine.rule.Rule;
-import com.ayyoub.fuzzycoach.fuzzyengine.variable.FuzzyValue;
-import com.ayyoub.fuzzycoach.fuzzyengine.variable.LinguisticVariable;
+import com.ayyoub.fuzzycoach.fuzzyengine.fuzzifier.FuzzyValue;
+import com.ayyoub.fuzzycoach.fuzzyengine.fuzzifier.LinguisticVariable;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -16,13 +13,11 @@ import java.util.function.ToDoubleFunction;
  * Default implementation of {@link Inference}: merges rule conclusions by
  * taking the maximum degree per output term.
  */
-public final class InferenceImpl implements Inference {
+public final class DefaultInference implements Inference {
 
     @Override
     public InferenceResult evaluate(
-            List<Rule> rules,
-            Map<String, Map<String, Double>> fuzzified,
-            List<LinguisticVariable> outputs) {
+            List<Rule> rules, Map<String, FuzzyValue> fuzzified, List<LinguisticVariable> outputs) {
 
         if (rules == null || fuzzified == null || outputs == null) {
             throw new IllegalArgumentException("Rules, fuzzified values and outputs are required");
@@ -66,22 +61,19 @@ public final class InferenceImpl implements Inference {
         return new InferenceResult(fuzzyValues, activations);
     }
 
-    private ToDoubleFunction<Condition.Simple> degreeLookup(
-            Map<String, Map<String, Double>> fuzzified) {
+    private ToDoubleFunction<Condition.Simple> degreeLookup(Map<String, FuzzyValue> fuzzified) {
 
         return condition -> degreeOf(condition, fuzzified);
     }
 
-    private double degreeOf(
-            Condition.Simple condition, Map<String, Map<String, Double>> fuzzified) {
-
-        Map<String, Double> variableDegrees = fuzzified.get(condition.variableName());
-        if (variableDegrees == null) {
+    private double degreeOf(Condition.Simple condition, Map<String, FuzzyValue> fuzzified) {
+        FuzzyValue variableValue = fuzzified.get(condition.variableName());
+        if (variableValue == null) {
             throw new IllegalArgumentException("Rule references variable '"
                     + condition.variableName() + "', which has no fuzzified values");
         }
 
-        Double degree = variableDegrees.get(condition.termName());
+        Double degree = variableValue.degrees().get(condition.termName());
         if (degree == null) {
             throw new IllegalArgumentException("Variable '" + condition.variableName()
                     + "' has no term named '" + condition.termName() + "'");

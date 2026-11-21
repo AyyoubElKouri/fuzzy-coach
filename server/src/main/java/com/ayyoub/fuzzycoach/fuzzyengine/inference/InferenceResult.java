@@ -1,6 +1,6 @@
 package com.ayyoub.fuzzycoach.fuzzyengine.inference;
 
-import com.ayyoub.fuzzycoach.fuzzyengine.variable.FuzzyValue;
+import com.ayyoub.fuzzycoach.fuzzyengine.fuzzifier.FuzzyValue;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;

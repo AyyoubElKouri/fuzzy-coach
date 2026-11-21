@@ -1,4 +1,4 @@
-package com.ayyoub.fuzzycoach.fuzzyengine.rule;
+package com.ayyoub.fuzzycoach.fuzzyengine.inference;
 
 import java.util.Objects;
 

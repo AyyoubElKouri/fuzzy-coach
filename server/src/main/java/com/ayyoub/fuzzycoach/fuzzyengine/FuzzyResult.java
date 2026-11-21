@@ -1,7 +1,7 @@
-package com.ayyoub.fuzzycoach.fuzzyengine.engine;
+package com.ayyoub.fuzzycoach.fuzzyengine;
 
+import com.ayyoub.fuzzycoach.fuzzyengine.fuzzifier.FuzzyValue;
 import com.ayyoub.fuzzycoach.fuzzyengine.inference.RuleActivation;
-import com.ayyoub.fuzzycoach.fuzzyengine.variable.FuzzyValue;
 
 import java.util.Collections;
 import java.util.Comparator;

@@ -3,9 +3,9 @@ package com.ayyoub.fuzzycoach.fuzzyengine.inference;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import com.ayyoub.fuzzycoach.fuzzyengine.membership.Triangle;
-import com.ayyoub.fuzzycoach.fuzzyengine.rule.Rule;
-import com.ayyoub.fuzzycoach.fuzzyengine.variable.LinguisticVariable;
+import com.ayyoub.fuzzycoach.fuzzyengine.fuzzifier.FuzzyValue;
+import com.ayyoub.fuzzycoach.fuzzyengine.fuzzifier.LinguisticVariable;
+import com.ayyoub.fuzzycoach.fuzzyengine.fuzzifier.Triangle;
 
 import org.junit.jupiter.api.Test;
 
@@ -16,6 +16,14 @@ class InferenceTest {
 
     private final LinguisticVariable motivation = new LinguisticVariable(
             "motivation",
+            0,
+            10,
+            Map.of(
+                    "low", new Triangle(0, 0, 5),
+                    "high", new Triangle(5, 10, 10)));
+
+    private final LinguisticVariable stress = new LinguisticVariable(
+            "stress",
             0,
             10,
             Map.of(
@@ -36,10 +44,10 @@ class InferenceTest {
     void andTakesTheMinimum() {
         Rule rule = new Rule("IF motivation is low AND motivation is high THEN intensity is low");
 
-        Map<String, Map<String, Double>> fuzzified =
-                Map.of("motivation", Map.of("low", 0.8, "high", 0.3));
+        Map<String, FuzzyValue> fuzzified =
+                Map.of("motivation", value(motivation, Map.of("low", 0.8, "high", 0.3)));
 
-        InferenceResult result = new InferenceImpl().evaluate(List.of(rule), fuzzified, outputs);
+        InferenceResult result = new DefaultInference().evaluate(List.of(rule), fuzzified, outputs);
 
         assertEquals(0.3, result.fuzzyValue("intensity").degrees().get("low"), 1e-9);
     }
@@ -48,10 +56,10 @@ class InferenceTest {
     void orTakesTheMaximum() {
         Rule rule = new Rule("IF motivation is low OR motivation is high THEN intensity is low");
 
-        Map<String, Map<String, Double>> fuzzified =
-                Map.of("motivation", Map.of("low", 0.8, "high", 0.3));
+        Map<String, FuzzyValue> fuzzified =
+                Map.of("motivation", value(motivation, Map.of("low", 0.8, "high", 0.3)));
 
-        InferenceResult result = new InferenceImpl().evaluate(List.of(rule), fuzzified, outputs);
+        InferenceResult result = new DefaultInference().evaluate(List.of(rule), fuzzified, outputs);
 
         assertEquals(0.8, result.fuzzyValue("intensity").degrees().get("low"), 1e-9);
     }
@@ -61,11 +69,11 @@ class InferenceTest {
         Rule rule = new Rule("IF motivation is low AND stress is low OR motivation is high "
                 + "THEN intensity is low");
 
-        Map<String, Map<String, Double>> fuzzified = Map.of(
-                "motivation", Map.of("low", 0.8, "high", 0.9),
-                "stress", Map.of("low", 0.2));
+        Map<String, FuzzyValue> fuzzified = Map.of(
+                "motivation", value(motivation, Map.of("low", 0.8, "high", 0.9)),
+                "stress", value(stress, Map.of("low", 0.2)));
 
-        InferenceResult result = new InferenceImpl().evaluate(List.of(rule), fuzzified, outputs);
+        InferenceResult result = new DefaultInference().evaluate(List.of(rule), fuzzified, outputs);
 
         assertEquals(0.9, result.fuzzyValue("intensity").degrees().get("low"), 1e-9);
     }
@@ -75,11 +83,11 @@ class InferenceTest {
         Rule rule1 = new Rule("IF motivation is low THEN intensity is low");
         Rule rule2 = new Rule("IF motivation is high THEN intensity is low");
 
-        Map<String, Map<String, Double>> fuzzified =
-                Map.of("motivation", Map.of("low", 0.2, "high", 0.7));
+        Map<String, FuzzyValue> fuzzified =
+                Map.of("motivation", value(motivation, Map.of("low", 0.2, "high", 0.7)));
 
         InferenceResult result =
-                new InferenceImpl().evaluate(List.of(rule1, rule2), fuzzified, outputs);
+                new DefaultInference().evaluate(List.of(rule1, rule2), fuzzified, outputs);
 
         assertEquals(0.7, result.fuzzyValue("intensity").degrees().get("low"), 1e-9);
     }
@@ -89,11 +97,11 @@ class InferenceTest {
         Rule rule1 = new Rule("IF motivation is low THEN intensity is low");
         Rule rule2 = new Rule("IF motivation is high THEN intensity is high");
 
-        Map<String, Map<String, Double>> fuzzified =
-                Map.of("motivation", Map.of("low", 0.2, "high", 0.7));
+        Map<String, FuzzyValue> fuzzified =
+                Map.of("motivation", value(motivation, Map.of("low", 0.2, "high", 0.7)));
 
         InferenceResult result =
-                new InferenceImpl().evaluate(List.of(rule1, rule2), fuzzified, outputs);
+                new DefaultInference().evaluate(List.of(rule1, rule2), fuzzified, outputs);
 
         List<RuleActivation> activations = result.activations();
 
@@ -108,10 +116,10 @@ class InferenceTest {
     void unknownVariableGivesAClearError() {
         Rule rule = new Rule("IF stress is low THEN intensity is low");
 
-        Map<String, Map<String, Double>> fuzzified =
-                Map.of("motivation", Map.of("low", 0.8, "high", 0.3));
+        Map<String, FuzzyValue> fuzzified =
+                Map.of("motivation", value(motivation, Map.of("low", 0.8, "high", 0.3)));
 
-        Inference inference = new InferenceImpl();
+        Inference inference = new DefaultInference();
         assertThrows(
                 IllegalArgumentException.class,
                 () -> inference.evaluate(List.of(rule), fuzzified, outputs));
@@ -121,10 +129,10 @@ class InferenceTest {
     void unknownTermGivesAClearError() {
         Rule rule = new Rule("IF motivation is medium THEN intensity is low");
 
-        Map<String, Map<String, Double>> fuzzified =
-                Map.of("motivation", Map.of("low", 0.8, "high", 0.3));
+        Map<String, FuzzyValue> fuzzified =
+                Map.of("motivation", value(motivation, Map.of("low", 0.8, "high", 0.3)));
 
-        Inference inference = new InferenceImpl();
+        Inference inference = new DefaultInference();
         assertThrows(
                 IllegalArgumentException.class,
                 () -> inference.evaluate(List.of(rule), fuzzified, outputs));
@@ -134,12 +142,16 @@ class InferenceTest {
     void unknownOutputVariableGivesAClearError() {
         Rule rule = new Rule("IF motivation is low THEN duration is low");
 
-        Map<String, Map<String, Double>> fuzzified =
-                Map.of("motivation", Map.of("low", 0.8, "high", 0.3));
+        Map<String, FuzzyValue> fuzzified =
+                Map.of("motivation", value(motivation, Map.of("low", 0.8, "high", 0.3)));
 
-        Inference inference = new InferenceImpl();
+        Inference inference = new DefaultInference();
         assertThrows(
                 IllegalArgumentException.class,
                 () -> inference.evaluate(List.of(rule), fuzzified, outputs));
+    }
+
+    private static FuzzyValue value(LinguisticVariable variable, Map<String, Double> degrees) {
+        return new FuzzyValue(variable, degrees);
     }
 }

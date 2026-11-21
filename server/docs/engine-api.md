@@ -45,8 +45,8 @@ FuzzyEngine engine = FuzzyEngine.builder()
     .build();
 ```
 
-The builder defaults to `CentroidDefuzzifier`, `FuzzifierImpl`, and
-`InferenceImpl`. Override them with `.defuzzifier(...)`, `.fuzzifier(...)`, and
+The builder defaults to `CentroidDefuzzifier`, `DefaultFuzzifier`, and
+`DefaultInference`. Override them with `.defuzzifier(...)`, `.fuzzifier(...)`, and
 `.inference(...)`.
 
 Rules can also be added as objects with `.rule(rule)` or `.rules(rule1, rule2)`.

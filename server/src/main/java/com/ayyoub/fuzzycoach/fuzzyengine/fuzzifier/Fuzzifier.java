@@ -1,32 +1,27 @@
 package com.ayyoub.fuzzycoach.fuzzyengine.fuzzifier;
 
-import com.ayyoub.fuzzycoach.fuzzyengine.variable.LinguisticVariable;
-
 import java.util.List;
 import java.util.Map;
 
 /**
- * Public API of the fuzzifier module: turns crisp values into degrees of
+ * Public API of the fuzzifier stage: turns crisp input values into degrees of
  * membership.
  *
- * <p>{@link FuzzifierImpl} is the default implementation.
+ * <p>The stage owns the fuzzy vocabulary: {@link LinguisticVariable},
+ * {@link MembershipFunction}, {@link Triangle}, and {@link FuzzyValue}.
+ * {@link DefaultFuzzifier} is the default implementation.
+ *
+ * <p>An implementation must reject an unknown or missing input variable, and
+ * must return one fuzzy value per supplied variable.
  */
 public interface Fuzzifier {
 
     /**
-     * Fuzzifies a crisp value against every term of one variable.
-     *
-     * @return term name to degree of membership in that term
-     */
-    Map<String, Double> fuzzify(LinguisticVariable variable, double value);
-
-    /**
      * Fuzzifies one crisp value per variable.
      *
-     * @param variables the variables to fuzzify
-     * @param values    variable name to crisp value, must contain every variable
-     * @return variable name to (term name to degree)
+     * @param variables the variables to fuzzify, each with at least one term
+     * @param values    variable name to crisp value, one entry per variable
+     * @return variable name to its fuzzy value, in declaration order
      */
-    Map<String, Map<String, Double>> fuzzify(
-            List<LinguisticVariable> variables, Map<String, Double> values);
+    Map<String, FuzzyValue> fuzzify(List<LinguisticVariable> variables, Map<String, Double> values);
 }

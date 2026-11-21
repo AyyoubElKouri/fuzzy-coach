@@ -1,4 +1,4 @@
-package com.ayyoub.fuzzycoach.fuzzyengine.rule;
+package com.ayyoub.fuzzycoach.fuzzyengine.inference;
 
 /**
  * The conclusion of a rule: {@code variableName is termName}.

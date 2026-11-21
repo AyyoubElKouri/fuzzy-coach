@@ -1,4 +1,4 @@
-package com.ayyoub.fuzzycoach.fuzzyengine.rule;
+package com.ayyoub.fuzzycoach.fuzzyengine.inference;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
