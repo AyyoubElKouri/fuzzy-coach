@@ -42,9 +42,9 @@ public final class RuleSyntaxException extends IllegalArgumentException {
 
     private static String buildMessage(String detail, int offset, String ruleText) {
         return "Rule syntax error at offset " + offset + ": " + detail
-            + System.lineSeparator()
-            + ruleText
-            + System.lineSeparator()
-            + " ".repeat(offset) + "^";
+                + System.lineSeparator()
+                + ruleText
+                + System.lineSeparator()
+                + " ".repeat(offset) + "^";
     }
 }

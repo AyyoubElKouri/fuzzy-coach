@@ -70,12 +70,11 @@ public final class Inputs {
             throw new IllegalArgumentException("An input needs a variable name");
         }
         if (value == null) {
-            throw new IllegalArgumentException(
-                "Input '" + variableName + "' needs a value");
+            throw new IllegalArgumentException("Input '" + variableName + "' needs a value");
         }
         if (!Double.isFinite(value)) {
             throw new IllegalArgumentException(
-                "Input '" + variableName + "' must be finite, got " + value);
+                    "Input '" + variableName + "' must be finite, got " + value);
         }
 
         target.put(variableName, value);

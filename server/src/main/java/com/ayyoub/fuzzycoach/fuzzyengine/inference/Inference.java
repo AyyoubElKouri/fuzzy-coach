@@ -1,10 +1,10 @@
 package com.ayyoub.fuzzycoach.fuzzyengine.inference;
 
+import com.ayyoub.fuzzycoach.fuzzyengine.rule.Rule;
+import com.ayyoub.fuzzycoach.fuzzyengine.variable.LinguisticVariable;
+
 import java.util.List;
 import java.util.Map;
-
-import com.ayyoub.fuzzycoach.fuzzyengine.variable.LinguisticVariable;
-import com.ayyoub.fuzzycoach.fuzzyengine.rule.Rule;
 
 /**
  * Public API of the inference module: evaluates a rule base and returns the
@@ -21,7 +21,7 @@ public interface Inference {
      * @return fuzzy values by output variable name, and one activation per rule
      */
     InferenceResult evaluate(
-        List<Rule> rules,
-        Map<String, Map<String, Double>> fuzzified,
-        List<LinguisticVariable> outputs);
+            List<Rule> rules,
+            Map<String, Map<String, Double>> fuzzified,
+            List<LinguisticVariable> outputs);
 }

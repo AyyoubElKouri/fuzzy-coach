@@ -8,8 +8,7 @@ import java.util.function.ToDoubleFunction;
  * or several conditions combined with {@link AndCondition} or
  * {@link OrCondition}.
  */
-public sealed interface Condition
-    permits SimpleCondition, AndCondition, OrCondition {
+public sealed interface Condition permits SimpleCondition, AndCondition, OrCondition {
 
     /**
      * Evaluates this condition against the degrees supplied by {@code lookup}.
@@ -25,12 +24,14 @@ public sealed interface Condition
     default List<SimpleCondition> simpleConditions() {
         return switch (this) {
             case SimpleCondition condition -> List.of(condition);
-            case AndCondition and -> and.conditions().stream()
-                .flatMap(condition -> condition.simpleConditions().stream())
-                .toList();
-            case OrCondition or -> or.conditions().stream()
-                .flatMap(condition -> condition.simpleConditions().stream())
-                .toList();
+            case AndCondition and ->
+                and.conditions().stream()
+                        .flatMap(condition -> condition.simpleConditions().stream())
+                        .toList();
+            case OrCondition or ->
+                or.conditions().stream()
+                        .flatMap(condition -> condition.simpleConditions().stream())
+                        .toList();
         };
     }
 }

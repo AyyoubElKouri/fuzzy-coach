@@ -1,10 +1,10 @@
 package com.ayyoub.fuzzycoach.fuzzyengine.variable;
 
+import com.ayyoub.fuzzycoach.fuzzyengine.membership.MembershipFunction;
+
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-import com.ayyoub.fuzzycoach.fuzzyengine.membership.MembershipFunction;
 
 /**
  * A variable with a universe of discourse {@code [min, max]} and a set of
@@ -24,10 +24,7 @@ import com.ayyoub.fuzzycoach.fuzzyengine.membership.MembershipFunction;
  * }</pre>
  */
 public record LinguisticVariable(
-    String name,
-    double min,
-    double max,
-    Map<String, MembershipFunction> terms) {
+        String name, double min, double max, Map<String, MembershipFunction> terms) {
 
     public LinguisticVariable {
         if (name == null || name.isBlank()) {
@@ -36,7 +33,7 @@ public record LinguisticVariable(
 
         if (!(min < max)) {
             throw new IllegalArgumentException(
-                "Variable '" + name + "' requires min < max, got min=" + min + ", max=" + max);
+                    "Variable '" + name + "' requires min < max, got min=" + min + ", max=" + max);
         }
 
         if (terms == null || terms.isEmpty()) {
@@ -46,11 +43,10 @@ public record LinguisticVariable(
         terms.forEach((termName, membership) -> {
             if (termName == null || termName.isBlank()) {
                 throw new IllegalArgumentException(
-                    "Variable '" + name + "' has a term without a name");
+                        "Variable '" + name + "' has a term without a name");
             }
             if (membership == null) {
-                throw new IllegalArgumentException(
-                    "Term '" + termName + "' of variable '" + name
+                throw new IllegalArgumentException("Term '" + termName + "' of variable '" + name
                         + "' has no membership function");
             }
         });
@@ -94,17 +90,15 @@ public record LinguisticVariable(
 
         public Builder term(String termName, MembershipFunction membership) {
             if (termName == null || termName.isBlank()) {
-                throw new IllegalArgumentException(
-                    "Variable '" + name + "' needs a term name");
+                throw new IllegalArgumentException("Variable '" + name + "' needs a term name");
             }
             if (membership == null) {
-                throw new IllegalArgumentException(
-                    "Term '" + termName + "' of variable '" + name
+                throw new IllegalArgumentException("Term '" + termName + "' of variable '" + name
                         + "' has no membership function");
             }
             if (terms.putIfAbsent(termName, membership) != null) {
                 throw new IllegalArgumentException(
-                    "Variable '" + name + "' declares term '" + termName + "' twice");
+                        "Variable '" + name + "' declares term '" + termName + "' twice");
             }
 
             return this;
@@ -116,7 +110,7 @@ public record LinguisticVariable(
         public LinguisticVariable build() {
             if (!rangeSet) {
                 throw new IllegalArgumentException(
-                    "Variable '" + name + "' needs a range, call range(min, max)");
+                        "Variable '" + name + "' needs a range, call range(min, max)");
             }
 
             return new LinguisticVariable(name, min, max, terms);

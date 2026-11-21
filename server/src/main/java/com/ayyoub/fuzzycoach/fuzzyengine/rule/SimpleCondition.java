@@ -5,8 +5,7 @@ import java.util.function.ToDoubleFunction;
 /**
  * One {@code variableName is termName} condition.
  */
-public record SimpleCondition(String variableName, String termName)
-    implements Condition {
+public record SimpleCondition(String variableName, String termName) implements Condition {
 
     public SimpleCondition {
         if (variableName == null || variableName.isBlank()) {

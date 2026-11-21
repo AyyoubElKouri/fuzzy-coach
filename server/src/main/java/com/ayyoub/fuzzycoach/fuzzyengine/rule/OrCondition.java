@@ -25,15 +25,13 @@ public record OrCondition(List<Condition> conditions) implements Condition {
         }
 
         return conditions.stream()
-            .mapToDouble(condition -> condition.degree(lookup))
-            .max()
-            .orElseThrow();
+                .mapToDouble(condition -> condition.degree(lookup))
+                .max()
+                .orElseThrow();
     }
 
     @Override
     public String toString() {
-        return conditions.stream()
-            .map(Condition::toString)
-            .collect(Collectors.joining(" OR "));
+        return conditions.stream().map(Condition::toString).collect(Collectors.joining(" OR "));
     }
 }

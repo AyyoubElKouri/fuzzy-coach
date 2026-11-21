@@ -13,11 +13,10 @@ public record Triangle(double a, double b, double c) implements MembershipFuncti
     public Triangle {
         if (!(a <= b && b <= c)) {
             throw new IllegalArgumentException(
-                "Triangle requires a <= b <= c, got a=" + a + ", b=" + b + ", c=" + c);
+                    "Triangle requires a <= b <= c, got a=" + a + ", b=" + b + ", c=" + c);
         }
         if (a == c) {
-            throw new IllegalArgumentException(
-                "Triangle requires a < c, got a=c=" + a);
+            throw new IllegalArgumentException("Triangle requires a < c, got a=c=" + a);
         }
     }
 

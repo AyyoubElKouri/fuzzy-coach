@@ -191,9 +191,7 @@ final class RuleParser {
         String identifier = text.substring(start, position);
         if (isReserved(identifier)) {
             throw new RuleSyntaxException(
-                "reserved word '" + identifier + "' cannot be used as a name",
-                start,
-                text);
+                    "reserved word '" + identifier + "' cannot be used as a name", start, text);
         }
 
         return identifier;
@@ -201,16 +199,16 @@ final class RuleParser {
 
     private static boolean isReserved(String identifier) {
         return identifier.equalsIgnoreCase("if")
-            || identifier.equalsIgnoreCase("then")
-            || identifier.equalsIgnoreCase("and")
-            || identifier.equalsIgnoreCase("or")
-            || identifier.equalsIgnoreCase("is");
+                || identifier.equalsIgnoreCase("then")
+                || identifier.equalsIgnoreCase("and")
+                || identifier.equalsIgnoreCase("or")
+                || identifier.equalsIgnoreCase("is");
     }
 
     private static boolean isIdentifierStart(char character) {
         return (character >= 'A' && character <= 'Z')
-            || (character >= 'a' && character <= 'z')
-            || character == '_';
+                || (character >= 'a' && character <= 'z')
+                || character == '_';
     }
 
     private static boolean isIdentifierPart(char character) {
@@ -224,6 +222,5 @@ final class RuleParser {
     /**
      * The two components of a parsed rule.
      */
-    record ParsedRule(Condition condition, Conclusion conclusion) {
-    }
+    record ParsedRule(Condition condition, Conclusion conclusion) {}
 }

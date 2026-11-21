@@ -47,8 +47,8 @@ public final class Rule {
     @Override
     public boolean equals(Object other) {
         return other instanceof Rule rule
-            && condition.equals(rule.condition)
-            && conclusion.equals(rule.conclusion);
+                && condition.equals(rule.condition)
+                && conclusion.equals(rule.conclusion);
     }
 
     @Override

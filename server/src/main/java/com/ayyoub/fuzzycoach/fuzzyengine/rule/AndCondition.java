@@ -24,17 +24,17 @@ public record AndCondition(List<Condition> conditions) implements Condition {
         }
 
         return conditions.stream()
-            .mapToDouble(condition -> condition.degree(lookup))
-            .min()
-            .orElseThrow();
+                .mapToDouble(condition -> condition.degree(lookup))
+                .min()
+                .orElseThrow();
     }
 
     @Override
     public String toString() {
         return conditions.stream()
-            .map(condition -> condition instanceof OrCondition
-                ? "(" + condition + ")"
-                : condition.toString())
-            .collect(Collectors.joining(" AND "));
+                .map(condition -> condition instanceof OrCondition
+                        ? "(" + condition + ")"
+                        : condition.toString())
+                .collect(Collectors.joining(" AND "));
     }
 }

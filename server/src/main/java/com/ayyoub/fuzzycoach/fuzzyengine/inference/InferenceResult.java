@@ -1,24 +1,23 @@
 package com.ayyoub.fuzzycoach.fuzzyengine.inference;
 
+import com.ayyoub.fuzzycoach.fuzzyengine.variable.FuzzyValue;
+
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import com.ayyoub.fuzzycoach.fuzzyengine.variable.FuzzyValue;
 
 /**
  * Everything one inference pass produced: the fuzzy value of each output, and
  * the activation of every rule that was evaluated.
  */
 public record InferenceResult(
-    Map<String, FuzzyValue> fuzzyValues,
-    List<RuleActivation> activations) {
+        Map<String, FuzzyValue> fuzzyValues, List<RuleActivation> activations) {
 
     public InferenceResult {
         if (fuzzyValues == null || activations == null) {
             throw new IllegalArgumentException(
-                "An inference result needs fuzzy values and activations");
+                    "An inference result needs fuzzy values and activations");
         }
 
         fuzzyValues = Collections.unmodifiableMap(new LinkedHashMap<>(fuzzyValues));

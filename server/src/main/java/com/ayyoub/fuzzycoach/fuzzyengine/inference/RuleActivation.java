@@ -15,8 +15,7 @@ public record RuleActivation(Rule rule, double activation) {
             throw new IllegalArgumentException("A rule activation needs a rule");
         }
         if (!Double.isFinite(activation) || activation < 0.0 || activation > 1.0) {
-            throw new IllegalArgumentException(
-                "Activation must be in [0, 1], got " + activation);
+            throw new IllegalArgumentException("Activation must be in [0, 1], got " + activation);
         }
     }
 }

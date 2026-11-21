@@ -5,8 +5,7 @@ package com.ayyoub.fuzzycoach.fuzzyengine.defuzzifier;
  */
 final class Universe {
 
-    private Universe() {
-    }
+    private Universe() {}
 
     /**
      * Evenly spaced sample points, placed at the middle of each interval.

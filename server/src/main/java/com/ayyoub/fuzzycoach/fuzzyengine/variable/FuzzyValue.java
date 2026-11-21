@@ -1,8 +1,8 @@
 package com.ayyoub.fuzzycoach.fuzzyengine.variable;
 
-import java.util.Map;
-
 import com.ayyoub.fuzzycoach.fuzzyengine.membership.MembershipFunction;
+
+import java.util.Map;
 
 /**
  * The fuzzy value of one output variable: one degree per term, after every
@@ -38,9 +38,8 @@ public record FuzzyValue(LinguisticVariable variable, Map<String, Double> degree
 
             MembershipFunction membership = variable.terms().get(entry.getKey());
             if (membership == null) {
-                throw new IllegalArgumentException(
-                    "Fuzzy value references unknown term '" + entry.getKey()
-                        + "' of variable '" + variable.name() + "'");
+                throw new IllegalArgumentException("Fuzzy value references unknown term '"
+                        + entry.getKey() + "' of variable '" + variable.name() + "'");
             }
 
             result = Math.max(result, Math.min(activation, membership.degree(x)));

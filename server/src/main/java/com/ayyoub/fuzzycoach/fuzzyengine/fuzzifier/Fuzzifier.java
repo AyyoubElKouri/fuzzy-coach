@@ -1,9 +1,9 @@
 package com.ayyoub.fuzzycoach.fuzzyengine.fuzzifier;
 
+import com.ayyoub.fuzzycoach.fuzzyengine.variable.LinguisticVariable;
+
 import java.util.List;
 import java.util.Map;
-
-import com.ayyoub.fuzzycoach.fuzzyengine.variable.LinguisticVariable;
 
 /**
  * Public API of the fuzzifier module: turns crisp values into degrees of
@@ -28,6 +28,5 @@ public interface Fuzzifier {
      * @return variable name to (term name to degree)
      */
     Map<String, Map<String, Double>> fuzzify(
-        List<LinguisticVariable> variables,
-        Map<String, Double> values);
+            List<LinguisticVariable> variables, Map<String, Double> values);
 }

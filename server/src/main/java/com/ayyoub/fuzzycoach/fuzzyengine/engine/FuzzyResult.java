@@ -1,14 +1,14 @@
 package com.ayyoub.fuzzycoach.fuzzyengine.engine;
 
+import com.ayyoub.fuzzycoach.fuzzyengine.inference.RuleActivation;
+import com.ayyoub.fuzzycoach.fuzzyengine.variable.FuzzyValue;
+
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.OptionalDouble;
-
-import com.ayyoub.fuzzycoach.fuzzyengine.variable.FuzzyValue;
-import com.ayyoub.fuzzycoach.fuzzyengine.inference.RuleActivation;
 
 /**
  * Everything the engine produced for one evaluation.
@@ -18,14 +18,14 @@ import com.ayyoub.fuzzycoach.fuzzyengine.inference.RuleActivation;
  * activation is recorded so the caller can see which rules fired.
  */
 public record FuzzyResult(
-    Map<String, Double> outputs,
-    Map<String, FuzzyValue> fuzzyValues,
-    List<RuleActivation> activations) {
+        Map<String, Double> outputs,
+        Map<String, FuzzyValue> fuzzyValues,
+        List<RuleActivation> activations) {
 
     public FuzzyResult {
         if (outputs == null || fuzzyValues == null || activations == null) {
             throw new IllegalArgumentException(
-                "A result needs outputs, fuzzy values and activations");
+                    "A result needs outputs, fuzzy values and activations");
         }
 
         outputs = Collections.unmodifiableMap(new LinkedHashMap<>(outputs));
@@ -77,9 +77,10 @@ public record FuzzyResult(
         fuzzyValue(variableName);
 
         return activations.stream()
-            .filter(activation -> activation.rule().conclusion().variableName().equals(variableName))
-            .filter(activation -> activation.activation() > 0.0)
-            .sorted(Comparator.comparingDouble(RuleActivation::activation).reversed())
-            .toList();
+                .filter(activation ->
+                        activation.rule().conclusion().variableName().equals(variableName))
+                .filter(activation -> activation.activation() > 0.0)
+                .sorted(Comparator.comparingDouble(RuleActivation::activation).reversed())
+                .toList();
     }
 }

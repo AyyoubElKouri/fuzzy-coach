@@ -1,18 +1,5 @@
 package com.ayyoub.fuzzycoach.fuzzyengine.engine;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import com.ayyoub.fuzzycoach.fuzzyengine.rule.Conclusion;
-import com.ayyoub.fuzzycoach.fuzzyengine.variable.FuzzyValue;
-import com.ayyoub.fuzzycoach.fuzzyengine.variable.LinguisticVariable;
-import com.ayyoub.fuzzycoach.fuzzyengine.rule.Rule;
-import com.ayyoub.fuzzycoach.fuzzyengine.rule.RuleSyntaxException;
-import com.ayyoub.fuzzycoach.fuzzyengine.rule.SimpleCondition;
 import com.ayyoub.fuzzycoach.fuzzyengine.defuzzifier.CentroidDefuzzifier;
 import com.ayyoub.fuzzycoach.fuzzyengine.defuzzifier.Defuzzifier;
 import com.ayyoub.fuzzycoach.fuzzyengine.fuzzifier.Fuzzifier;
@@ -20,6 +7,19 @@ import com.ayyoub.fuzzycoach.fuzzyengine.fuzzifier.FuzzifierImpl;
 import com.ayyoub.fuzzycoach.fuzzyengine.inference.Inference;
 import com.ayyoub.fuzzycoach.fuzzyengine.inference.InferenceImpl;
 import com.ayyoub.fuzzycoach.fuzzyengine.inference.InferenceResult;
+import com.ayyoub.fuzzycoach.fuzzyengine.rule.Conclusion;
+import com.ayyoub.fuzzycoach.fuzzyengine.rule.Rule;
+import com.ayyoub.fuzzycoach.fuzzyengine.rule.RuleSyntaxException;
+import com.ayyoub.fuzzycoach.fuzzyengine.rule.SimpleCondition;
+import com.ayyoub.fuzzycoach.fuzzyengine.variable.FuzzyValue;
+import com.ayyoub.fuzzycoach.fuzzyengine.variable.LinguisticVariable;
+
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Runs the full Mamdani pipeline in one call:
@@ -59,12 +59,12 @@ public final class FuzzyEngine {
     private final Defuzzifier defuzzifier;
 
     private FuzzyEngine(
-        List<LinguisticVariable> inputs,
-        List<LinguisticVariable> outputs,
-        List<Rule> rules,
-        Fuzzifier fuzzifier,
-        Inference inference,
-        Defuzzifier defuzzifier) {
+            List<LinguisticVariable> inputs,
+            List<LinguisticVariable> outputs,
+            List<Rule> rules,
+            Fuzzifier fuzzifier,
+            Inference inference,
+            Defuzzifier defuzzifier) {
 
         if (inputs == null || inputs.isEmpty()) {
             throw new IllegalArgumentException("An engine needs at least one input variable");
@@ -110,14 +110,12 @@ public final class FuzzyEngine {
         Map<String, Double> values = inputs.asMap();
         requireCompleteInputs(values);
 
-        Map<String, Map<String, Double>> fuzzified = fuzzifier.fuzzify(
-            this.inputs, values);
+        Map<String, Map<String, Double>> fuzzified = fuzzifier.fuzzify(this.inputs, values);
         InferenceResult inferred = inference.evaluate(rules, fuzzified, outputs);
         Map<String, FuzzyValue> fuzzyValues = inferred.fuzzyValues();
 
         Map<String, Double> crispOutputs = new LinkedHashMap<>();
-        fuzzyValues.forEach((name, value) ->
-            crispOutputs.put(name, defuzzifier.defuzzify(value)));
+        fuzzyValues.forEach((name, value) -> crispOutputs.put(name, defuzzifier.defuzzify(value)));
 
         return new FuzzyResult(crispOutputs, fuzzyValues, inferred.activations());
     }
@@ -140,14 +138,13 @@ public final class FuzzyEngine {
         for (String provided : values.keySet()) {
             if (!inputNames.contains(provided)) {
                 throw new IllegalArgumentException(
-                    "Unknown input variable: " + provided + ", expected one of " + inputNames);
+                        "Unknown input variable: " + provided + ", expected one of " + inputNames);
             }
         }
 
         for (String expected : inputNames) {
             if (!values.containsKey(expected)) {
-                throw new IllegalArgumentException(
-                    "Missing value for input variable: " + expected);
+                throw new IllegalArgumentException("Missing value for input variable: " + expected);
             }
         }
     }
@@ -159,27 +156,27 @@ public final class FuzzyEngine {
         for (String name : outputNames) {
             if (inputNames.contains(name)) {
                 throw new IllegalArgumentException(
-                    "Variable '" + name + "' is declared both as input and output");
+                        "Variable '" + name + "' is declared both as input and output");
             }
         }
 
         for (Rule rule : rules) {
             for (SimpleCondition condition : rule.condition().simpleConditions()) {
                 requireTerm(
-                    inputs,
-                    inputNames,
-                    condition.variableName(),
-                    condition.termName(),
-                    "input");
+                        inputs,
+                        inputNames,
+                        condition.variableName(),
+                        condition.termName(),
+                        "input");
             }
 
             Conclusion conclusion = rule.conclusion();
             requireTerm(
-                outputs,
-                outputNames,
-                conclusion.variableName(),
-                conclusion.termName(),
-                "output");
+                    outputs,
+                    outputNames,
+                    conclusion.variableName(),
+                    conclusion.termName(),
+                    "output");
         }
     }
 
@@ -188,7 +185,7 @@ public final class FuzzyEngine {
         for (LinguisticVariable variable : variables) {
             if (!names.add(variable.name())) {
                 throw new IllegalArgumentException(
-                    "Duplicate " + kind + " variable: " + variable.name());
+                        "Duplicate " + kind + " variable: " + variable.name());
             }
         }
 
@@ -196,25 +193,25 @@ public final class FuzzyEngine {
     }
 
     private void requireTerm(
-        List<LinguisticVariable> variables,
-        Set<String> names,
-        String variableName,
-        String termName,
-        String kind) {
+            List<LinguisticVariable> variables,
+            Set<String> names,
+            String variableName,
+            String termName,
+            String kind) {
 
         if (!names.contains(variableName)) {
             throw new IllegalArgumentException(
-                "Rule references unknown " + kind + " variable: " + variableName);
+                    "Rule references unknown " + kind + " variable: " + variableName);
         }
 
         LinguisticVariable variable = variables.stream()
-            .filter(candidate -> candidate.name().equals(variableName))
-            .findFirst()
-            .orElseThrow();
+                .filter(candidate -> candidate.name().equals(variableName))
+                .findFirst()
+                .orElseThrow();
 
         if (!variable.terms().containsKey(termName)) {
             throw new IllegalArgumentException(
-                "Variable '" + variableName + "' has no term named '" + termName + "'");
+                    "Variable '" + variableName + "' has no term named '" + termName + "'");
         }
     }
 
@@ -230,8 +227,7 @@ public final class FuzzyEngine {
         private Inference inference = new InferenceImpl();
         private Defuzzifier defuzzifier = new CentroidDefuzzifier();
 
-        private Builder() {
-        }
+        private Builder() {}
 
         public Builder input(LinguisticVariable variable) {
             if (variable == null) {
@@ -318,9 +314,9 @@ public final class FuzzyEngine {
                     rules.add(new Rule(texts[index]));
                 } catch (RuleSyntaxException error) {
                     throw new RuleSyntaxException(
-                        "rule " + (index + 1) + " of " + texts.length + ": " + error.detail(),
-                        error.offset(),
-                        error.ruleText());
+                            "rule " + (index + 1) + " of " + texts.length + ": " + error.detail(),
+                            error.offset(),
+                            error.ruleText());
                 }
             }
 

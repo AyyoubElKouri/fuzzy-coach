@@ -1,13 +1,13 @@
 package com.ayyoub.fuzzycoach.fuzzyengine.engine;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 class InputsTest {
 
@@ -28,16 +28,14 @@ class InputsTest {
 
     @Test
     void rejectsNonFiniteValues() {
-        assertThrows(IllegalArgumentException.class,
-            () -> Inputs.of("motivation", Double.NaN));
+        assertThrows(IllegalArgumentException.class, () -> Inputs.of("motivation", Double.NaN));
     }
 
     @Test
     void mapIsReadOnly() {
         Inputs inputs = Inputs.of("motivation", 8.0);
 
-        assertThrows(UnsupportedOperationException.class,
-            () -> inputs.asMap().put("stress", 2.0));
+        assertThrows(UnsupportedOperationException.class, () -> inputs.asMap().put("stress", 2.0));
     }
 
     @Test

@@ -1,10 +1,10 @@
 package com.ayyoub.fuzzycoach.fuzzyengine.fuzzifier;
 
+import com.ayyoub.fuzzycoach.fuzzyengine.variable.LinguisticVariable;
+
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import com.ayyoub.fuzzycoach.fuzzyengine.variable.LinguisticVariable;
 
 /**
  * Default implementation of {@link Fuzzifier}.
@@ -18,16 +18,15 @@ public final class FuzzifierImpl implements Fuzzifier {
         }
 
         Map<String, Double> degrees = new LinkedHashMap<>();
-        variable.terms().forEach((termName, membership) ->
-            degrees.put(termName, membership.degree(value)));
+        variable.terms()
+                .forEach((termName, membership) -> degrees.put(termName, membership.degree(value)));
 
         return degrees;
     }
 
     @Override
     public Map<String, Map<String, Double>> fuzzify(
-        List<LinguisticVariable> variables,
-        Map<String, Double> values) {
+            List<LinguisticVariable> variables, Map<String, Double> values) {
 
         if (variables == null || values == null) {
             throw new IllegalArgumentException("Variables and values are required");
@@ -38,14 +37,15 @@ public final class FuzzifierImpl implements Fuzzifier {
             Double value = values.get(variable.name());
             if (value == null) {
                 throw new IllegalArgumentException(
-                    "No value provided for variable: " + variable.name());
+                        "No value provided for variable: " + variable.name());
             }
 
             results.put(variable.name(), fuzzify(variable, value));
         }
 
         for (String provided : values.keySet()) {
-            boolean known = variables.stream().anyMatch(variable -> variable.name().equals(provided));
+            boolean known =
+                    variables.stream().anyMatch(variable -> variable.name().equals(provided));
             if (!known) {
                 throw new IllegalArgumentException("Unknown input variable: " + provided);
             }
