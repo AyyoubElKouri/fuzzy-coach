@@ -5,8 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.ayyoub.fuzzycoach.fuzzyengine.core.FuzzyValue;
-import com.ayyoub.fuzzycoach.fuzzyengine.core.RuleActivation;
+import com.ayyoub.fuzzycoach.fuzzyengine.variable.FuzzyValue;
 
 /**
  * Everything one inference pass produced: the fuzzy value of each output, and

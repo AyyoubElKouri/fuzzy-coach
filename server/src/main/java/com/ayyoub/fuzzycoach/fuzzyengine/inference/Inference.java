@@ -3,8 +3,8 @@ package com.ayyoub.fuzzycoach.fuzzyengine.inference;
 import java.util.List;
 import java.util.Map;
 
-import com.ayyoub.fuzzycoach.fuzzyengine.core.LinguisticVariable;
-import com.ayyoub.fuzzycoach.fuzzyengine.core.Rule;
+import com.ayyoub.fuzzycoach.fuzzyengine.variable.LinguisticVariable;
+import com.ayyoub.fuzzycoach.fuzzyengine.rule.Rule;
 
 /**
  * Public API of the inference module: evaluates a rule base and returns the

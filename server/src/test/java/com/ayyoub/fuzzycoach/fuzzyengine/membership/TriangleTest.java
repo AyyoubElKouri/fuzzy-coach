@@ -1,6 +1,4 @@
-package com.ayyoub.fuzzycoach.fuzzyengine;
-
-import com.ayyoub.fuzzycoach.fuzzyengine.core.Triangle;
+package com.ayyoub.fuzzycoach.fuzzyengine.membership;
 
 import org.junit.jupiter.api.Test;
 

@@ -1,6 +1,8 @@
-package com.ayyoub.fuzzycoach.fuzzyengine.core;
+package com.ayyoub.fuzzycoach.fuzzyengine.variable;
 
 import java.util.Map;
+
+import com.ayyoub.fuzzycoach.fuzzyengine.membership.MembershipFunction;
 
 /**
  * The fuzzy value of one output variable: one degree per term, after every

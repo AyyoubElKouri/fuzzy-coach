@@ -1,15 +1,11 @@
-package com.ayyoub.fuzzycoach.fuzzyengine;
+package com.ayyoub.fuzzycoach.fuzzyengine.inference;
 
 import java.util.List;
 import java.util.Map;
 
-import com.ayyoub.fuzzycoach.fuzzyengine.core.LinguisticVariable;
-import com.ayyoub.fuzzycoach.fuzzyengine.core.Rule;
-import com.ayyoub.fuzzycoach.fuzzyengine.core.RuleActivation;
-import com.ayyoub.fuzzycoach.fuzzyengine.core.Triangle;
-import com.ayyoub.fuzzycoach.fuzzyengine.inference.Inference;
-import com.ayyoub.fuzzycoach.fuzzyengine.inference.InferenceImpl;
-import com.ayyoub.fuzzycoach.fuzzyengine.inference.InferenceResult;
+import com.ayyoub.fuzzycoach.fuzzyengine.variable.LinguisticVariable;
+import com.ayyoub.fuzzycoach.fuzzyengine.rule.Rule;
+import com.ayyoub.fuzzycoach.fuzzyengine.membership.Triangle;
 
 import org.junit.jupiter.api.Test;
 

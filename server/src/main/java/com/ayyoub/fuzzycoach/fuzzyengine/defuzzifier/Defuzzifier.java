@@ -1,6 +1,6 @@
 package com.ayyoub.fuzzycoach.fuzzyengine.defuzzifier;
 
-import com.ayyoub.fuzzycoach.fuzzyengine.core.FuzzyValue;
+import com.ayyoub.fuzzycoach.fuzzyengine.variable.FuzzyValue;
 
 /**
  * Public API of the defuzzifier module: turns a fuzzy value into one crisp

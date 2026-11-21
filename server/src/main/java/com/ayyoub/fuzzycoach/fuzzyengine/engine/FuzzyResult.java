@@ -1,4 +1,4 @@
-package com.ayyoub.fuzzycoach.fuzzyengine;
+package com.ayyoub.fuzzycoach.fuzzyengine.engine;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.OptionalDouble;
 
-import com.ayyoub.fuzzycoach.fuzzyengine.core.FuzzyValue;
-import com.ayyoub.fuzzycoach.fuzzyengine.core.RuleActivation;
+import com.ayyoub.fuzzycoach.fuzzyengine.variable.FuzzyValue;
+import com.ayyoub.fuzzycoach.fuzzyengine.inference.RuleActivation;
 
 /**
  * Everything the engine produced for one evaluation.

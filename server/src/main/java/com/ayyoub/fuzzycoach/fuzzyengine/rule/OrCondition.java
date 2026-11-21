@@ -1,4 +1,4 @@
-package com.ayyoub.fuzzycoach.fuzzyengine.core;
+package com.ayyoub.fuzzycoach.fuzzyengine.rule;
 
 import java.util.List;
 import java.util.function.ToDoubleFunction;

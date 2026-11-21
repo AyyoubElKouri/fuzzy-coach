@@ -1,4 +1,4 @@
-package com.ayyoub.fuzzycoach.fuzzyengine;
+package com.ayyoub.fuzzycoach.fuzzyengine.engine;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -7,12 +7,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.ayyoub.fuzzycoach.fuzzyengine.core.Conclusion;
-import com.ayyoub.fuzzycoach.fuzzyengine.core.FuzzyValue;
-import com.ayyoub.fuzzycoach.fuzzyengine.core.LinguisticVariable;
-import com.ayyoub.fuzzycoach.fuzzyengine.core.Rule;
-import com.ayyoub.fuzzycoach.fuzzyengine.core.RuleSyntaxException;
-import com.ayyoub.fuzzycoach.fuzzyengine.core.SimpleCondition;
+import com.ayyoub.fuzzycoach.fuzzyengine.rule.Conclusion;
+import com.ayyoub.fuzzycoach.fuzzyengine.variable.FuzzyValue;
+import com.ayyoub.fuzzycoach.fuzzyengine.variable.LinguisticVariable;
+import com.ayyoub.fuzzycoach.fuzzyengine.rule.Rule;
+import com.ayyoub.fuzzycoach.fuzzyengine.rule.RuleSyntaxException;
+import com.ayyoub.fuzzycoach.fuzzyengine.rule.SimpleCondition;
 import com.ayyoub.fuzzycoach.fuzzyengine.defuzzifier.CentroidDefuzzifier;
 import com.ayyoub.fuzzycoach.fuzzyengine.defuzzifier.Defuzzifier;
 import com.ayyoub.fuzzycoach.fuzzyengine.fuzzifier.Fuzzifier;

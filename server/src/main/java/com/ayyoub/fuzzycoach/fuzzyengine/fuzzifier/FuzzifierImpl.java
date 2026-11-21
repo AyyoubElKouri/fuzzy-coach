@@ -4,7 +4,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.ayyoub.fuzzycoach.fuzzyengine.core.LinguisticVariable;
+import com.ayyoub.fuzzycoach.fuzzyengine.variable.LinguisticVariable;
 
 /**
  * Default implementation of {@link Fuzzifier}.

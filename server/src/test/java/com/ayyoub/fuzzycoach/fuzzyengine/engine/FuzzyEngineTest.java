@@ -1,13 +1,13 @@
-package com.ayyoub.fuzzycoach.fuzzyengine;
+package com.ayyoub.fuzzycoach.fuzzyengine.engine;
 
 import java.util.List;
 import java.util.Map;
 
-import com.ayyoub.fuzzycoach.fuzzyengine.core.LinguisticVariable;
-import com.ayyoub.fuzzycoach.fuzzyengine.core.Rule;
-import com.ayyoub.fuzzycoach.fuzzyengine.core.RuleActivation;
-import com.ayyoub.fuzzycoach.fuzzyengine.core.RuleSyntaxException;
-import com.ayyoub.fuzzycoach.fuzzyengine.core.Triangle;
+import com.ayyoub.fuzzycoach.fuzzyengine.variable.LinguisticVariable;
+import com.ayyoub.fuzzycoach.fuzzyengine.rule.Rule;
+import com.ayyoub.fuzzycoach.fuzzyengine.inference.RuleActivation;
+import com.ayyoub.fuzzycoach.fuzzyengine.rule.RuleSyntaxException;
+import com.ayyoub.fuzzycoach.fuzzyengine.membership.Triangle;
 import com.ayyoub.fuzzycoach.fuzzyengine.defuzzifier.CentroidDefuzzifier;
 import com.ayyoub.fuzzycoach.fuzzyengine.defuzzifier.Defuzzifier;
 

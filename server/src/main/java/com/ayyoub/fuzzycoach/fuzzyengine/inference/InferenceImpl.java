@@ -6,12 +6,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.ToDoubleFunction;
 
-import com.ayyoub.fuzzycoach.fuzzyengine.core.Conclusion;
-import com.ayyoub.fuzzycoach.fuzzyengine.core.FuzzyValue;
-import com.ayyoub.fuzzycoach.fuzzyengine.core.LinguisticVariable;
-import com.ayyoub.fuzzycoach.fuzzyengine.core.Rule;
-import com.ayyoub.fuzzycoach.fuzzyengine.core.RuleActivation;
-import com.ayyoub.fuzzycoach.fuzzyengine.core.SimpleCondition;
+import com.ayyoub.fuzzycoach.fuzzyengine.rule.Conclusion;
+import com.ayyoub.fuzzycoach.fuzzyengine.variable.FuzzyValue;
+import com.ayyoub.fuzzycoach.fuzzyengine.variable.LinguisticVariable;
+import com.ayyoub.fuzzycoach.fuzzyengine.rule.Rule;
+import com.ayyoub.fuzzycoach.fuzzyengine.rule.SimpleCondition;
 
 /**
  * Default implementation of {@link Inference}: merges rule conclusions by

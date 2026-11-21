@@ -1,4 +1,4 @@
-package com.ayyoub.fuzzycoach.fuzzyengine.core;
+package com.ayyoub.fuzzycoach.fuzzyengine.rule;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +22,7 @@ import java.util.List;
  * {@code [A-Za-z_][A-Za-z0-9_]*}. The words {@code if}, {@code then},
  * {@code and}, {@code or} and {@code is} are reserved.
  */
-public final class RuleParser {
+final class RuleParser {
 
     private final String text;
     private int position;
@@ -38,7 +38,7 @@ public final class RuleParser {
     /**
      * @throws RuleSyntaxException when {@code text} is not a valid rule
      */
-    public static ParsedRule parse(String text) {
+    static ParsedRule parse(String text) {
         return new RuleParser(text).parseRule();
     }
 
@@ -224,6 +224,6 @@ public final class RuleParser {
     /**
      * The two components of a parsed rule.
      */
-    public record ParsedRule(Condition condition, Conclusion conclusion) {
+    record ParsedRule(Condition condition, Conclusion conclusion) {
     }
 }

@@ -1,8 +1,10 @@
-package com.ayyoub.fuzzycoach.fuzzyengine.core;
+package com.ayyoub.fuzzycoach.fuzzyengine.variable;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import com.ayyoub.fuzzycoach.fuzzyengine.membership.MembershipFunction;
 
 /**
  * A variable with a universe of discourse {@code [min, max]} and a set of
